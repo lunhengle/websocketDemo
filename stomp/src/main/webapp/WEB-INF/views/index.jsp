@@ -26,10 +26,12 @@
                 stompClient.subscribe('/app/greeting', function (greeting) {
                     var data = JSON.parse(greeting.body);
                     console.log("topic======" + data.content);
+                    showGreeting(data.content);
                 });
                 stompClient.subscribe('/topic/lun', function (greeting) {
                     var data = JSON.parse(greeting.body);
                     console.log("topic lun======" + data.content);
+                    showGreeting(data.content);
                 });
             });
         }
@@ -42,18 +44,26 @@
                 console.log('Connected======' + frame);
                 stompClient.subscribe('/user/' + userId + '/message', function (greeting) {
                     var data = JSON.parse(greeting.body);
-                    console.log("topic======" + data.content);
-                });
-                stompClient.subscribe('/topic/lun', function (greeting) {
-                    var data = JSON.parse(greeting.body);
-                    console.log("topic lun======" + data.content);
+                    console.log("user======" + data.content);
+                    showGreeting(data.content);
                 });
             });
         }
 
-        function send() {
+        function sendAny() {
             var userId = document.getElementById("name").value;
             stompClient.send("/app/hello", {}, JSON.stringify({name: userId}));
+        }
+        function send() {
+            var userId = document.getElementById("name").value;
+            stompClient.send("/app/message", {}, JSON.stringify({name: userId}));
+        }
+        function showGreeting(message) {
+            var response = document.getElementById('response');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(message));
+            response.appendChild(p);
         }
     </script>
 </head>
@@ -61,12 +71,14 @@
 <div>
     <div>
         <button id="connect" onclick="connect();">Connect</button>
-        <button id="connectAny" onclick="connectAny();">Connect</button>
+        <button id="connectAny" onclick="connectAny();">ConnectAny</button>
         <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
     </div>
     <div id="conversationDiv">
         <label>What is your name?</label><input type="text" id="name"/>
         <input id="send" onclick="send()" type="button" value="send"/>
+        <input id="sendAny" onclick="sendAny()" type="button" value="sendAny"/>
+        <p id="response"></p>
     </div>
 </div>
 </body>

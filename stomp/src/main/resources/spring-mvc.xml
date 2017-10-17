@@ -14,7 +14,7 @@
         <websocket:stomp-endpoint path="/stomp" allowed-origins="*">
             <websocket:sockjs/>
         </websocket:stomp-endpoint>
-        <websocket:simple-broker prefix="/topic"/>
+        <websocket:simple-broker prefix="/topic,/user"/>
     </websocket:message-broker>
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
